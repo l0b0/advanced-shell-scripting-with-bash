@@ -1,68 +1,1434 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="author" content="Catalyst">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="Catalyst">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+        <title>Advanced shell scripting with Bash — Catalyst</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/catalyst.css" id="theme">
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/catalyst.css" id="theme">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/catalyst-syntax.css">
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/catalyst-syntax.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <!-- Cover slide -->
+                <section>
+                    <h3>Advanced shell scripting with Bash</h3>
+                    <h1 class="catalyst-logo">Catalyst</h1>
+                    <p class="small-text">Presented by Victor Engmark</p>
+                </section>
 
-				<!-- Slide with Catalyst slogan -->
-				<section class="image-slide">
-					<img class="cat-slogan-image" src="css/theme/images/freedom-to-innovate.svg" alt="freedom to innovate">
-				</section>
-			</div>
+                <section>
+                    <h3>Administration</h3>
+                    <ul class="stretch">
+                        <li>Bathrooms &amp; fire exits <img class="img-right" src="img/level6.png"/></li>
+                        <li class="fragment">Morning tea &amp; lunch</li>
+                    </ul>
+                </section>
 
-			<div class="footer">
-				<div class="scarf">
-					<div class="scarf-orange"></div>
-					<div class="scarf-yellow"></div>
-					<div class="scarf-blue"></div>
-					<div class="scarf-green"></div>
-				</div>
-				<div class="footer-inner">
-					<div class="catalyst-logo-footer">Catalyst</div>
-					<div class="open-source-technologists">open source technologists</div>
-				</div>
-			</div>
-		</div>
+                <section>
+                    <h3>Introductions</h3>
+                    <ul>
+                        <li>Who am I?</li>
+                        <li class="fragment">Who are you?</li>
+                        <li class="fragment">Got any quick shell horror stories?</li>
+                        <li class="fragment">What do you hope to get out of this course?</li>
+                    </ul>
+                </section>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+                <section>
+                    <h3>Hints &amp; tips</h3>
+                    <ul>
+                        <li>Please ask questions anytime</li>
+                        <li>Take notes</li>
+                        <li>Try things out</li>
+                        <li class="fragment"><code class="bash">PS1='\$ ' PS2='> '</code></li>
+                    </ul>
+                </section>
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+                <section>
+                    <h3>Outline 1</h3>
+                    <ul>
+                        <li><a href="#motivation">Everything sucks; now what?</a></li>
+                        <li><a href="#context">Context is everything</a></li>
+                        <li><a href="#redirect">Your flight has been redirected</a></li>
+                        <li><a href="#pipes">Ceci n’est pas une pipe</a></li>
+                        <li><a href="#nul">NUL is not your friend</a></li>
+                        <li><a href="#quoting">Use More Quotes™!</a></li>
+                        <li><a href="#heredocs">&lt;&lt; HERE-KITTY</a></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Outline 2</h3>
+                    <ul>
+                        <li><a href="#escaping">Escape\ from\ Alcatraz</a></li>
+                        <li><a href="#variables">Forecast: <code class="bash">$variable</code></a></li>
+                        <li><a href="#arrays">Collect all the things!</a></li>
+                        <li><a href="#conditionals">Conditional surrender</a></li>
+                        <li><a href="#numbers">When is zero equal to one?</a></li>
+                        <li><a href="#newlines">EOL to the EOF, yo!</a></li>
+                        <li><a href="#read">Reading is fun</a></li>
+                        <li><a href="#return-codes">Exit in an orderly fashion</a></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Outline 3</h3>
+                    <ul>
+                        <li><a href="#defense">Defensive coding</a></li>
+                        <li><a href="#trap">Setting traps</a></li>
+                        <li><a href="#kill">Killing me softly</a></li>
+                        <li><a href="#copy-paste">The opposite of WYSIWYG</a></li>
+                        <li><a href="#debugging">To debug or to debug, that is not a question</a></li>
+                        <li><a href="#portability">Say no to portability</a></li>
+                        <li><a href="#file-loop">PhD thesis: looping through files</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </section>
+
+                <section id="motivation">
+                    <h3>Everything sucks; now what?</h3>
+                    <ul>
+                        <li class="fragment"><strong>Understand</strong></li>
+                        <li class="fragment">Simplify</li>
+                        <li class="fragment" style="color: darkgrey;">Replace</li>
+                    </ul>
+                </section>
+
+                <section id="context">
+                    <h3>Context is everything</h3>
+                    <p>Count commands with quotes in <code class="bash">$username</code>’s history</p>
+                    <table>
+                        <tbody>
+                            <tr class="fragment">
+                                <td><a href="https://www.gnu.org/software/bash/manual/html_node/Quote-Removal.html#Quote-Removal">Syntactic double quotes</a></td>
+                                <td><code class="bash">count=<span style="color: red;">""</span></code></td>
+                            </tr>
+                            <tr class="fragment">
+                                <td><a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html#Command-Substitution">Command substitution</a></td>
+                                <td><code class="bash">count="<span style="color: red;">$()</span>"</code></td>
+                            </tr>
+                            <tr class="fragment">
+                                <td><a href="https://www.gnu.org/software/bash/manual/html_node/Word-Splitting.html#Word-Splitting">Word splitting</a></td>
+                                <td><code class="bash">count="$(<span style="color: red;">grep --count</span>)"</code></td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Syntactic single quotes</td>
+                                <td><code class="bash">count="$(grep --count <span style="color: red;">''</span>)"</code></td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Quoted string</td>
+                                <td><code class="bash">count="$(grep --count '<span style="color: red;">"</span>')"</code></td>
+                            </tr>
+                            <tr class="fragment">
+                                <td><a href="https://www.gnu.org/software/bash/manual/html_node/Tilde-Expansion.html#Tilde-Expansion">Tilde expansion</a></td>
+                                <td><code class="bash">count="$(grep --count '"' <span style="color: red;">~</span>)"</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <span class="fragment">…</span>
+                </section>
+
+                <section>
+                    <h3>Context is everything</h3>
+                    <p>Count commands with double quotes in <code class="bash">$username</code>’s Bash history.</p>
+                    …
+                    <table>
+                        <tbody>
+                            <tr class="fragment">
+                                <td>Syntactic double quotes</td>
+                                <td><code class="bash">count="$(grep --count '"' ~<span style="color: red;">""</span>)"</code><span style="color: red; float: right;">☹</span></td>
+                            </tr>
+                            <tr class="fragment">
+                                <td><a href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html#Shell-Parameter-Expansion">Variable expansion</a></td>
+                                <td><code class="bash">count="$(grep --count '"' ~"<span style="color: red;">${username}</span>")"</code></td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Double quoted literal</td>
+                                <td><code class="bash">count="$(grep --count '"' ~"${username}<span style="color: red;">/.bash_history</span>")"</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h3>Context is everything</h3>
+                    <pre class="bash"><code class="fragment" data-trim>
+$ username="$USER"
+                    </code><code class="fragment" data-trim>
+$ count="$(grep --count '"' ~"${username}/.bash_history")"
+                    </code><code class="fragment" data-trim>
+grep: ~train/.bash_history: No such file or directory
+                    </code><code class="fragment" data-trim>
+$ ls ~train/.bash_history
+/home/train/.bash_history
+                    </code><code class="fragment" data-trim>
+$ wtf
+bash: wtf: command not found
+                    </code></pre>
+
+                    <blockquote cite="https://www.gnu.org/software/bash/manual/html_node/Shell-Expansions.html" class="fragment">The order of expansions is: […] tilde expansion, parameter and variable expansion, […]</blockquote>
+                </section>
+
+                <section>
+                    <h3>Context is everything</h3>
+                    <p><a href="https://stackoverflow.com/a/28208292/96588">Solution</a>: <span class="fragment"><span style="text-decoration: line-through">eval</span> <span class="fragment"><code class="bash">getent</code>+<code class="bash">cut</code></span></span></p>
+                    <pre class="bash fragment"><code data-trim>
+$ username="$USER"
+$ user_home="$(getent passwd "$username" | cut --delimiter=':' --fields='6')"
+$ count="$(grep --count '"' "${user_home}/.bash_history")"
+$ echo "$count"
+169
+                    </code></pre>
+                </section>
+
+                <section id="redirect">
+                    <h3>Your flight has been redirected</h3>
+                    <p>Read left-to-right:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ { echo info; echo error >&2; } > result.txt 2>&1
+$ cat result.txt
+                    </code><code class="fragment" data-trim>
+info
+error
+                    </code></pre>
+                    <pre class="bash fragment"><code data-trim>
+$ { echo info; echo error >&2; } 2>&1 > result.txt
+                    </code><code class="fragment" data-trim>
+error
+                    </code><code class="fragment" data-trim>
+$ cat result.txt
+                    </code><code class="fragment" data-trim>
+info
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Your flight has been redirected</h3>
+                    <p>One file per redirect:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ echo foo > foo.txt
+$ echo bar > bar.txt
+$ echo > ./*.txt
+bash: ./*.txt: ambiguous redirect
+$ cat foo.txt bar.txt
+foo
+bar
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Your flight has been redirected</h3>
+                    <p><code class="bash">cat</code> is only needed in corner cases like combining stdin and a file:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ echo foo > foo.txt
+$ echo bar | cat foo.txt -
+foo
+bar
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Your flight has been redirected</h3>
+                    <p>Redirect the rest of the script:</p>
+                    <pre class="bash fragment"><code data-trim>
+exec > out.log 2> error.log
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Your flight has been redirected</h3>
+                    <p>Print <em>and</em> save the output with <code class="bash">tee</code>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ echo foo | tee output.log
+foo
+$ cat output.log
+foo
+                    </code></pre>
+                    <p class="fragment"><code class="bash">--append</code> to append to file.</p>
+                </section>
+
+                <section>
+                    <h3>Your flight has been redirected</h3>
+                    <p>Redirect a stream to a command and back again:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ (echo out; echo foo >&2; echo bar >&2) 2> >(grep bar >&2)
+                    </code><code class="fragment" data-trim>
+out
+bar
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Your flight has been redirected</h3>
+                    <p>Standard output is synchronous but <em>standard error is asynchronous</em> — its ordering interleaved with standard output is not guaranteed.</p>
+                </section>
+
+                <section>
+                    <h3>Your flight has been redirected — exercise</h3>
+                    <p>A script is processing a lot of items, printing out useful information as it goes. It also prints a lot of identical and irrelevant lines on standard error. Silence <em>only</em> these identical lines so that you are still alerted when something actually bad happens.</p>
+                    <p class="fragment">Example: <code class="bash">du --summarize /*</code> printing <q>Permission denied.</q></p>
+                    <aside class="notes"><code class="bash">du --summarize /* 2&gt; &gt;(grep -v Permission &gt;&2)</code></aside>
+                </section>
+
+                <section id="pipes">
+                    <h3>Ceci n’est pas une pipe</h3>
+                    <p><img src="img/pipe.png" alt="warp pipe" title="Warp pipe, public domain"/></p>
+                </section>
+
+                <section>
+                    <h3>Ceci n’est pas une pipe</h3>
+                    <p>Application specific workarounds to get colour output:</p>
+                    <pre class="bash fragment"><code data-trim>
+grep --color=always […] | less --RAW-CONTROL-CHARS
+                    </code></pre>
+                    <p class="fragment">Colour codes are <em>characters.</em></p>
+                </section>
+
+                <section>
+                    <h3>Ceci n’est pas une pipe</h3>
+                    <p>Subshell environment for each subsequent command:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ count=0
+$ env | while read
+> do
+>     let ++count
+> done
+$ echo "$count"
+                    </code><code class="fragment" data-trim>
+0
+                    </code></pre>
+                    <p class="fragment">Context is lost.</p>
+                </section>
+
+                <section id="nul">
+                    <h3>NUL is not your friend</h3>
+                    <p><em>Some</em> tools have a flag to separate or terminate entries with NUL.</p>
+                    <p class="fragment">You <em>cannot</em> store NUL in a variable.</p>
+                    <p class="fragment">You <em>cannot</em> put NUL in a literal:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf '%q\n' $'foo\0bar\0baz\0'
+foo
+                    </code></pre>
+                    <p class="fragment">Bash doesn’t like half the world’s files.</p>
+                </section>
+
+                <section id="quoting">
+                    <h3>Use More Quotes™!</h3>
+                    <p>Single quotes for any literals without single quote:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf '%s\n' '-|\|o e$cape'
+-|\|o e$cape
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Use More Quotes™!</h3>
+                    <p>Double quotes for strings with variables, commands or single quotes:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ subject='this'
+$ printf '%s\n' "Can't $(basename /usr/bin/touch) ${subject}"
+Can't touch this
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Use More Quotes™!</h3>
+                    <p>Dollar single quotes for escape sequences:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf '%s\n' $'first\nsecond'
+first
+second
+                    </code></pre>
+                </section>
+
+                <section id="heredocs">
+                    <h3>&lt;&lt; HERE-KITTY</h3>
+                    <p><code class="bash">&lt;&lt; NAME</code> is almost like a double quoted context:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ result=EOF
+$ cat << EOF
+> EOF must be the only literal on the line to terminate:
+>  EOF
+> ${result}
+> EOF
+EOF must be the only literal on the line to terminate:
+ EOF
+EOF
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>&lt;&lt; HERE-KITTY</h3>
+                    <p>Backslash in <code class="bash">&lt;&lt; NAME</code> is literal except before a newline:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ cat << EOF
+> foo\
+> bar
+> foo\bar
+> EOF
+foobar
+foo\bar
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>&lt;&lt; HERE-KITTY</h3>
+                    <p>Quotes are literal in <code class="bash">&lt;&lt; NAME</code>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ cat << EOF
+> '"
+> EOF
+'"
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>&lt;&lt; HERE-KITTY</h3>
+                    <p><code class="bash">&lt;&lt; 'NAME'</code> works like a single quoted context:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ result=foo
+$ cat << 'EOF'
+> ${result}
+> EOF
+${result}
+                    </code></pre>
+                </section>
+
+                <section id="escaping">
+                    <h3>Escape\ from\ Alcatraz</h3>
+                    <p>Avoid word splitting in unquoted strings:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf '%s\n' foo bar
+foo
+bar
+$ printf '%s\n' foo\ bar
+foo bar
+                    </code></pre>
+                    <p class="fragment"><code class="bash">\n</code> is a <em><code class="bash">printf</code></em> escaped character<span style="text-decoration: line-through;">, not a shell one</span>.</p>
+                </section>
+
+                <section>
+                    <h3>Escape\ from\ Alcatraz</h3>
+                    <p>Literal <code class="bash">\n</code> terminators:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf '%s\\n' foo bar
+foo\nbar\n
+                    </code></pre>
+                    <p class="fragment">No newline at end of output, so it's followed immediately by <code class="bash">PS1</code>.</p>
+                </section>
+
+                <section>
+                    <h3>Escape\ from\ Alcatraz</h3>
+                    <p>Escaping escape sequences:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf %s\\\\n foo bar
+foo\nbar\n
+                    </code></pre>
+                    <p class="fragment">The number of backslashes always <em>doubles</em>, because each character has to be escaped separately in the next context.</p>
+                </section>
+
+                <section>
+                    <h3>Escape\ from\ Alcatraz</h3>
+                    <p>Avoid multiple escape levels</p>
+                    <ul>
+                        <li class="fragment">Quoting</li>
+                        <li class="fragment">Here documents</li>
+                        <li class="fragment">Files</li>
+                        <li class="fragment"><code class="bash">printf '%q'</code></li>
+                    </ul>
+                </section>
+
+                <section id="variables">
+                    <h3>Forecast: <code class="bash">$variable</code></h3>
+                    <p>Arguments beyond <code class="bash">$9</code>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ set -- {a..z}
+$ echo ${10}
+j
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Forecast: <code class="bash">$variable</code></h3>
+                    <p>Avoid <code class="bash">$*</code>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ set -- 'a b' 'c d'
+$ for parameter in "$*"
+> do
+>     printf '%s\n' "$parameter"
+> done
+                    </code><code class="fragment" data-trim>
+a b c d
+                    </code><code class="fragment" data-trim>
+$ for parameter in $*
+> do
+>     printf '%s\n' "$parameter"
+> done
+                    </code><code class="fragment" data-trim>
+a
+b
+c
+d
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Forecast: <code class="bash">$variable</code></h3>
+                    <p>Use <code class="bash">"$@"</code>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ for parameter
+> do
+>     printf '%s\n' "$parameter"
+> done
+                    </code><code class="fragment" data-trim>
+a b
+c d
+                    </code></pre>
+                    <p class="fragment">“Default” <code class="bash">for</code> loop target.</p>
+                </section>
+
+                <section>
+                    <h3>Forecast: <code class="bash">$variable</code></h3>
+                    <p>Default value:</p>
+                    <pre class="bash fragment"><code data-trim>
+PATH="${PATH-/bin:/usr/bin}"
+                    </code></pre>
+                    <p class="fragment"><code class="bash">:-</code> also matches <em>empty value.</em></p>
+                    <p class="fragment">Use with <code class="bash">set -o nounset</code>.</em></p>
+                </section>
+
+                <section>
+                    <h3>Forecast: <code class="bash">$variable</code></h3>
+                    <p>Replacement value:</p>
+                    <pre class="bash fragment"><code data-trim>
+result="${1+defined}"
+                    </code></pre>
+                    <p class="fragment"><code class="bash">:+</code> only matches <em>non-empty value.</em></p>
+                </section>
+
+                <section>
+                    <h3>Forecast: <code class="bash">$variable</code></h3>
+                    <p>The right hand side can be more complex:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ list=
+$ entry='x'
+$ list="${list:+"${list}:"}$entry"
+$ echo "$list"
+                    </code><code class="fragment" data-trim>
+x
+                    </code></pre><pre class="bash fragment"><code data-trim>
+$ list=foo:bar
+$ entry='x'
+$ list="${list:+"${list}:"}$entry"
+$ echo "$list"
+                    </code><code class="fragment" data-trim>
+foo:bar:x
+                    </code></pre>
+                </section>
+
+                <section id="arrays">
+                    <h3>Collect all the things!</h3>
+                    <p>Collect non-<code class="bash">IFS</code> characters:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ matches=($(grep --only-matching . <<< $'some foo\nother foo'))
+$ echo "${matches[@]}"
+                    </code><code class="fragment" data-trim>
+s o m e f o o o t h e r f o o
+</code></pre>
+                    <p class="fragment">No quotes to enable word splitting.</p>
+                </section>
+
+                <section>
+                    <h3>Collect all the things!</h3>
+                    <p>Collect <code class="bash">IFS</code>-separated <em>or -terminated</em> “words”:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ while IFS=$'\t' read -a cells
+> do
+>     echo Line
+>     printf '%s\n' "${cells[@]}"
+> done <<< $'column 1\tcolumn 2\nvalue 1\tvalue 2'
+                    </code><code class="fragment" data-trim>
+Line
+column 1
+column 2
+Line
+value 1
+value 2
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Collect all the things!</h3>
+                    <p>Append to an array:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ characters=({a..z})
+$ characters+=({0..9})
+$ echo "${characters[@]}"
+                    </code><code class="fragment" data-trim>
+a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Collect all the things! — exercise</h3>
+                    <p>Create an array of all the executables on your <code class="bash">$PATH</code>.</p>
+                    <aside class="notes">
+                        <pre class="bash"><code class="bash">
+$ IFS=: read -a paths <<< "$PATH"
+$ for path in "${paths[@]}"
+> do
+>     executables+=("$path"/*)
+> done
+                        </code></pre>
+                    </aside>
+                </section>
+
+                <section id="conditionals">
+                    <h3>Conditional surrender</h3>
+                    <p>Use the built in <code class="bash">[[</code>:</p>
+                    <pre class="bash fragment"><code data-trim>
+unset foo
+$ [ $foo = 'bar' ]
+                    </code><code class="fragment" data-trim>
+bash: [: -eq: unary operator expected
+                    </code></pre>
+                    <pre class="bash fragment"><code data-trim>
+$ [[ $foo = 'bar' ]]
+                    </code></pre>
+                    <p class="fragment">Can use unquoted variable references.</p>
+                </section>
+
+                <section>
+                    <h3>Conditional surrender</h3>
+                    <p>Use shell conditionals <code class="bash">&&</code>, <code class="bash">||</code> etc. — easier to understand:</p>
+                    <pre class="bash fragment"><code data-trim>
+if [[ $name = 'foo' ]] || [[ $name = 'bar' ]]
+                    </code></pre>
+                </section>
+
+                <section id="numbers">
+                    <h3>When is zero equal to one?</h3>
+                    <p>Numeric contexts:</p>
+                    <ul>
+                        <li class="fragment"><code class="bash">$((index++))</code> prints result</li>
+                        <li class="fragment"><code class="bash">let index++</code> prints nothing</li>
+                        <li class="fragment"><code class="bash">[[ $index -eq 0 ]]</code></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>When is zero equal to one?</h3>
+                    <p><code class="bash">0</code> starts <em>octal</em>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ echo $((077))
+                    </code><code class="fragment" data-trim>
+63
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>When is zero equal to one?</h3>
+                    <p><code class="bash">0x</code> starts <em>hex</em>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ echo $((0xFF))
+                    </code><code class="fragment" data-trim>
+255
+                    </code></pre>
+                    <p class="fragment">Case insensitive.</p>
+                </section>
+
+                <section>
+                    <h3>When is zero equal to one?</h3>
+                    <p><code class="bash">N#</code> starts <em>base N</em> (2-64):</p>
+                    <pre class="bash fragment"><code data-trim>
+$ echo $((64#a))
+                    </code><code class="fragment" data-trim>
+10
+                    </code></pre>
+                    <pre class="bash fragment"><code data-trim>
+$ echo $((64#A))
+                    </code><code class="fragment" data-trim>
+36
+                    </code></pre>
+                    <pre class="bash fragment"><code data-trim>
+$ echo $((64#@))
+                    </code><code class="fragment" data-trim>
+62
+                    </code></pre>
+                    <pre class="bash fragment"><code data-trim>
+$ echo $((64#_))
+                    </code><code class="fragment" data-trim>
+63
+                    </code></pre>
+                    <p class="fragment">Case insensitive if base ≤ 36.</p>
+                </section>
+
+                <section>
+                    <h3>When is zero equal to one?</h3>
+                    <p>Comes after variable expansion:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ msb=BE
+$ lsb=EF
+$ echo $((0x${msb}${lsb}))
+                    </code><code class="fragment" data-trim>
+48879
+                   </code></pre>
+                </section>
+
+                <section>
+                    <h3>When is zero equal to one?</h3>
+                    <p>Beware leading zeros:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ month=08
+$ let month++
+                    </code><code class="error fragment" data-trim>
+bash: let: 08: value too great for base (error token is "08")
+                   </code></pre>
+                    <p class="fragment">Find out in August!</p>
+                </section>
+
+                <section>
+                    <h3>When is zero equal to one?</h3>
+                    <p>Type coercion:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ foo=one
+$ [[ $foo -eq 0 ]] && echo 'equal'
+                    </code><code class="fragment" data-trim>
+equal
+                   </code></pre>
+                </section>
+
+                <section>
+                    <h3>Conditional surrender</h3>
+                    <p>Left associative: <code class="bash">foo || bar && baz</code> ≡ <code class="bash">{ foo || bar; } && baz</code></p>
+                    <pre class="bash fragment"><code data-trim>
+$ false || echo failure && echo success
+                    </code><code class="fragment" data-trim>
+failure
+success
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Conditional surrender</h3>
+                    <p><code class="bash">foo && bar || baz</code> ≡ <code class="bash">{ foo && bar; } || baz</code></p>
+                    <pre class="bash fragment"><code data-trim>
+$ false && echo success || echo failure
+                    </code><code class="fragment" data-trim>
+failure
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Conditional surrender</h3>
+                    <p>Break it up:</p>
+                    <pre class="bash"><code data-trim>
+if some_command
+then
+    echo success
+else
+    echo failure
+fi
+                    </code></pre>
+                </section>
+
+                <section id="newlines">
+                    <h3>EOL to the EOF, yo!</h3>
+                    <p>What is the actual contents of <code class="bash">$result</code>?</p>
+                    <pre class="bash"><code data-trim>
+$ result="$(printf '%s' $'foo\n\n')"
+$ echo "${#result}"
+                    </code><code class="fragment" data-trim>
+3
+                    </code></pre>
+                    <p class="fragment"><code class="bash">$()</code> removes trailing newlines.</p>
+                </section>
+
+                <section>
+                    <h3>EOL to the EOF, yo!</h3>
+                    <p><code class="bash">$()</code> workaround:</p>
+                    <pre class="bash"><code data-trim>
+$ result="$(printf '%s' $'foo\n\n\n'; printf x)"
+$ result="${result%x}"
+$ echo "${#result}"
+6
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>EOL to the EOF, yo!</h3>
+                    <p><code class="bash">&lt;&lt;&lt;</code> (here string) is bad in a different way:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ wc -c <<< $'foo\n\n'
+6
+                    </code></pre>
+                    <p class="fragment">Unconditionally adds a newline.</p>
+                </section>
+
+                <section>
+                    <h3>EOL to the EOF, yo!</h3>
+                    <p>Newline-preserving redirects:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf $'foo\n\n' | wc -c
+5
+                    </code><code class="fragment" data-trim>
+$ printf $'foo\n\n' &gt; result.txt
+$ wc -c result.txt
+5 result.txt
+                    </code><code class="fragment" data-trim>
+$ wc -c &lt &lt(printf $'foo\n\n')
+5
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>EOL to the EOF, yo!</h3>
+                    <p><code class="bash">echo</code> vs. <code class="bash">printf</code></p>
+                    <pre class="bash"><code data-trim>
+$ echo foo | xxd -cols 1
+                    </code><code class="fragment" data-trim>
+00000000: 66  f
+00000001: 6f  o
+00000002: 6f  o
+00000003: 0a  .
+                    </code></pre>
+                    <p class="fragment"><code class="bash">echo</code> adds newline (0x0a) at end of output.</p>
+                </section>
+
+                <section>
+                    <h3>EOL to the EOF, yo!</h3>
+                    <p><code class="bash">echo</code> vs. <code class="bash">printf</code></p>
+                    <pre class="bash"><code data-trim>
+$ printf '%s' foo | xxd -cols 1
+                    </code><code class="fragment" data-trim>
+00000000: 66  f
+00000001: 6f  o
+00000002: 6f  o
+                    </code></pre>
+                    <p class="fragment"><code class="bash">printf</code> formats arguments.</p>
+                </section>
+
+                <section id="read">
+                    <h3>Reading is fun</h3>
+                    <p>Read newline-<em>terminated</em> strings:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ while read
+> do
+>     echo "$REPLY"
+> done &lt &lt(printf '%s\n' 'foo' 'bar')
+                    </code><code class="fragment" data-trim>
+foo
+bar
+                    </code></pre>
+                    <p class="fragment">A “line” in *nix operating systems.</p>
+                </section>
+
+                <section>
+                    <h3>Reading is fun</h3>
+                    <p>Read newline-<em>separated</em> strings:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ while read || [[ -n "$REPLY" ]]
+> do
+>     echo "$REPLY"
+> done &lt &lt(printf $'foo\nbar')
+                    </code><code class="fragment" data-trim>
+foo
+bar
+                    </code></pre>
+                    <p class="fragment"><code class="bash">read</code> populates variable then fails on non-newline character at EOF.</p>
+                </section>
+
+                <section>
+                    <h3>Reading is fun</h3>
+                    <p>Read <em>NUL-terminated strings</em>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ cd "$(mktemp --directory)"
+$ touch 'backslash\separated' $'newline\nseparated' 'space separated'
+$ while IFS= read -r -d ''
+> do
+>     printf '%q\n' "$REPLY"
+> done &lt &lt(find . -mindepth 1 -exec printf '%s\0' {} +)
+                    </code><code class="fragment" data-trim>
+./backslash\\separated
+$'./newline\nseparated'
+./space\ separated
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Reading is fun</h3>
+                    <p>Read <em><code class="bash">IFS</code>-terminated words</em>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ read first rest <<< '   foo   bar   baz   '
+$ printf '%q\n' "$first" "$rest"
+                    </code><code class="fragment" data-trim>
+foo
+bar\ \ \ baz
+                    </code></pre>
+                    <p class="fragment">Trims leading and trailing <code class="bash">IFS</code> characters.</p>
+                </section>
+
+                <section id="return-codes">
+                    <h3>Exit in an orderly fashion</h3>
+                    <p>Command “success:”</p>
+                    <pre class="bash fragment"><code data-trim>
+$ if true
+> then
+>     echo 'Success'
+> fi
+Success
+                    </code></pre>
+                    <p class="fragment">Defined as exit code 0.</p>
+                </section>
+
+                <section>
+                    <h3>Exit in an orderly fashion</h3>
+                    <p>Completely application specific. For example, arithmetic zero in <code class="bash">let</code>:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ count=0
+                    </code><code class="fragment" data-trim>
+$ echo $?
+0
+                    </code><code class="fragment" data-trim>
+$ let count=0
+                    </code><code class="fragment" data-trim>
+$ echo $?
+1
+                    </code><code class="fragment" data-trim>
+$ let count++
+                    </code><code class="fragment" data-trim>
+$ echo $?
+1
+                    </code><code class="fragment" data-trim>
+$ let count++
+                    </code><code class="fragment" data-trim>
+$ echo $?
+0
+                    </code><code class="fragment" data-trim>
+$ printf '%s\n' "$count"
+2
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Exit in an orderly fashion</h3>
+                    <p>Some fairly well documented numbers: /usr/include/sysexits.h:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ grep '^#define ' /usr/include/sysexits.h
+#define EX_OK		0	/* successful termination */
+#define EX__BASE	64	/* base value for error messages */
+#define EX_USAGE	64	/* command line usage error */
+#define EX_DATAERR	65	/* data format error */
+#define EX_NOINPUT	66	/* cannot open input */
+#define EX_NOUSER	67	/* addressee unknown */
+#define EX_NOHOST	68	/* host name unknown */
+#define EX_UNAVAILABLE	69	/* service unavailable */
+#define EX_SOFTWARE	70	/* internal software error */
+#define EX_OSERR	71	/* system error (e.g., can't fork) */
+#define EX_OSFILE	72	/* critical OS file missing */
+#define EX_CANTCREAT	73	/* can't create (user) output file */
+#define EX_IOERR	74	/* input/output error */
+#define EX_TEMPFAIL	75	/* temp failure; user is invited to retry */
+#define EX_PROTOCOL	76	/* remote error in protocol */
+#define EX_NOPERM	77	/* permission denied */
+#define EX_CONFIG	78	/* configuration error */
+#define EX__MAX	78	/* maximum listed value */
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Exit in an orderly fashion</h3>
+                    <q><a href="https://www.gnu.org/software/bash/manual/bashref.html#Exit-Status">When a command terminates on a fatal signal whose number is N, Bash uses the value 128+N as the exit status.</a></q>
+                    <pre class="bash fragment"><code data-trim>
+$ kill -l INT
+2
+                    </code><code class="fragment" data-trim>
+$ sleep 1d
+^C
+$ echo $?
+                    </code><code class="fragment" data-trim>
+130
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Exit in an orderly fashion</h3>
+                    <p>Don’t <code class="bash">exit "$error_count"</code>!</p>
+                    <pre class="bash fragment"><code data-trim>
+$ bash
+$ exit 256
+exit
+$ echo $?
+                    </code><code class="fragment" data-trim>
+0
+                    </code></pre>
+                </section>
+
+                <section id="defense">
+                    <h3>Defensive coding</h3>
+                    <pre class="bash fragment"><code data-trim>
+#!/usr/bin/env bash
+
+set -o errexit
+
+temporary_directory="$(mktemp --directory)"
+readonly temporary_directory
+[…]
+temporary_directory="$(mktemp --directory)"
+                    </code></pre>
+                    <p class="fragment"><a href="https://mywiki.wooledge.org/BashFAQ/105">Caveats galore</a></p>
+                </section>
+
+                <section>
+                    <h3>Defensive coding</h3>
+                    <pre class="bash fragment"><code data-trim>
+#!/usr/bin/env bash
+
+set -o errexit -o noclobber
+
+temporary_directory="$(mktemp --directory)"
+echo "Start" > "${temporary_directory}/script.log"
+[…]
+echo "End" > "${temporary_directory}/script.log"
+                    </code></pre>
+                    <blockquote class="fragment">/tmp/[…]/script.log: cannot overwrite existing file</blockquote>
+                </section>
+
+                <section>
+                    <h3>Defensive coding</h3>
+                    <pre class="bash fragment"><code data-trim>
+#!/usr/bin/env bash
+
+set -o errexit -o noclobber -o nounset
+
+temporary_directory="$(mktemp --directory)"
+echo "Start" > "${temporary_directry}/script.log"
+                    </code></pre>
+                    <blockquote class="fragment">temporary_directry: unbound variable</blockquote>
+                </section>
+
+                <section>
+                    <h3>Defensive coding</h3>
+                    <pre class="bash fragment"><code data-trim>
+#!/usr/bin/env bash
+
+set -o errexit -o noclobber -o nounset -o pipefail
+
+grep foo "$1" | cut --delimiter=':' --fields=1 | grep --invert-match bar
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Defensive coding</h3>
+                    <p>Umask:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ cd "$(mktemp --directory)"
+$ umask
+0022
+$ touch first
+$ ls -l first
+-rw-r--r-- […] first
+                    </code><code class="fragment" data-trim>
+$ umask 0077
+$ touch second
+$ ls -l second
+-rw------- […] second
+                    </code></pre>
+                </section>
+
+                <section id="trap">
+                    <h3>Setting traps</h3>
+                    <p>Don’t litter</p>
+                    <pre class="bash fragment"><code data-trim>
+trap 'rm -rf "$temporary_directory"' EXIT
+temporary_directory="$(mktemp --directory)"
+                    </code></pre>
+                    <p class="fragment">Also atomic and (by default) only accessible by owner.</p>
+                </section>
+
+                <section>
+                    <h3>Setting traps</h3>
+                    <p>Print debugging information on demand:</p>
+                    <pre class="bash fragment"><code data-trim>
+trap env USR1
+                    </code></pre>
+                    <pre class="bash fragment"><code data-trim>
+kill -USR1 $!
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Setting traps</h3>
+                    <p>Reload configuration in long-running process:</p>
+                    <pre class="bash fragment"><code data-trim>
+trap read_configuration HUP
+                    </code></pre>
+                    <pre class="bash fragment"><code data-trim>
+kill -HUP $server_pid
+                    </code></pre>
+                </section>
+
+                <section id="kill">
+                    <h3>Killing me softly</h3>
+                    <pre class="bash fragment" style="text-decoration: line-through;"><code data-trim>
+kill -9 "$!"
+                    </code></pre>
+                    <p class="fragment">Now you have to <a href="https://mywiki.wooledge.org/ProcessManagement#I.27m_trying_to_kill_-9_my_job_but_blah_blah_blah...">clean up manually</a>.</p>
+                </section>
+
+                <section>
+                    <h3>Killing me softly</h3>
+                    <pre class="bash fragment"><code data-trim>
+kill "$!"
+timeout="$(date --date='now + 1 minute' +%s)"
+while [[ "$(date +%s)" -lt "$timeout" ]]
+do
+    if kill -0 "$!"
+    then
+        sleep 0.1
+    else
+        exit 0 # Win
+    fi
+done
+exit 1 # Fail
+                    </code></pre>
+                </section>
+
+                <section id="copy-paste">
+                    <h3>The opposite of WYSIWYG</h3>
+                    <p>What you see is not always what you think you see:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ printf '%s\n' “foo” ‘foo’
+                    </code><code class="fragment" data-trim>
+“foo”
+‘foo’
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>The opposite of WYSIWYG</h3>
+                    <p>What you see is not always what you think you see:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ grep —fixed-strings foo <<< foobar
+                    </code><code class="fragment" data-trim>
+grep: foo: No such file or directory
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>The opposite of WYSIWYG</h3>
+                    <p><strong><a href="https://thejh.net/misc/website-terminal-copy-paste">Never copy straight to a terminal</a>:</strong> <code class="bash">git clone
+                        <span style="position: absolute; left: -99999px; top: -99999px">/dev/null<br>echo "Hi! I'm a Trojan horse, what do you not need on this machine?"<br>git clone</span>
+                        https://github.com/l0b0/advanced-shell-scripting-with-bash.git</code></p>
+                    <p class="fragment">Try <kbd>Ctrl-x</kbd> <kbd>Ctrl-e</kbd></p>
+                </section>
+
+                <section id="debugging">
+                    <h3>To debug or to debug, that is not a question</h3>
+                    <pre class="bash fragment"><code data-trim>
+$ bash --noprofile --norc -o xtrace
+                    </code><code class="fragment" data-trim>
+bash-4.4$ find "$(egrep --only-matching '/usr/[^:]+(:|$)' <<< "$PATH" | head --lines=1 | head --bytes=-2)" -mindepth 1
+                    </code><code class="fragment" data-trim>
+++ egrep --only-matching '/usr/[^:]+(:|$)'
+++ head --bytes=-2
+++ head --lines=1
+                    </code><code class="fragment" data-trim>
++ find /usr/local/bin -mindepth 1
+                    </code><code class="fragment" data-trim>
+/usr/local/bin/foo
+                    </code></pre>
+                    <p class="fragment">Standard input is not shown.</p>
+                    <p class="fragment">“<code class="bash">+</code>” denotes execution level.</p>
+                    <p class="fragment">Pipelined commands run <em>simultaneously</em>, so ordering is not guaranteed.</p>
+                    <p class="fragment"><code class="bash">set -o xtrace</code> inside scripts.</p>
+                </section>
+
+                <section>
+                    <h3>To debug or to debug, that is not a question</h3>
+                    <p><code class="bash">strace</code> prints system calls and signals:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ strace -e openat cat /dev/null
+</code><code class="fragment" data-trim>
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/usr/lib/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
+openat(AT_FDCWD, "/dev/null", O_RDONLY) = 3
++++ exited with 0 +++
+                    </code></pre>
+                    <p class="fragment"><code class="bash">man 1 strace</code></p>
+                </section>
+
+                <section>
+                    <h3>To debug or to debug, that is not a question</h3>
+                    <p><code class="bash">lsof</code> lists files currently open by programs:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ nc catalyst.net.nz 80 &
+[3] 9999
+$ lsof -p $!
+                    </code><code class="fragment" data-trim>
+COMMAND   PID     USER   FD   TYPE  DEVICE SIZE/OFF    NODE NAME
+nc       9999 username  cwd    DIR   254,3     4096 8919615 /home/username
+nc       9999 username  rtd    DIR   254,2     4096       2 /
+nc       9999 username  txt    REG   254,2    39608 2921200 /usr/bin/netcat
+nc       9999 username  mem    REG   254,2    84016 2885772 /usr/lib/libresolv-2.27.so
+[…]
+nc       9999 username    0u   CHR   136,0      0t0       3 /dev/pts/0
+nc       9999 username    1u   CHR   136,0      0t0       3 /dev/pts/0
+nc       9999 username    2u   CHR   136,0      0t0       3 /dev/pts/0
+nc       9999 username    3u  IPv4 4538734      0t0     TCP machine-name:46748->catalyst.net.nz:http (ESTABLISHED)
+                    </code></pre>
+                    <p class="fragment"><code class="bash">man 8 lsof</code></p>
+                </section>
+
+                <section>
+                    <h3>To debug or to debug, that is not a question</h3>
+                    <p><code class="bash">netstat</code> prints networking information:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ sudo netstat --tcp --listening --numeric --program | sed --quiet '1,2p;/ssh/p'
+                    </code><code class="fragment" data-trim>
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1234/sshd
+tcp6       0      0 :::22                   :::*                    LISTEN      1234/sshd
+                    </code></pre>
+                    <p class="fragment"><code class="bash">man 8 netstat</code></p>
+                </section>
+
+                <section>
+                    <h3>To debug or to debug, that is not a question</h3>
+                    <p>/proc has lots of runtime information:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ journalctl --catalog --follow --unit=sshd | grep "$USER" &
+$ ls -lA /proc/$!/fd
+                    </code><code class="fragment" data-trim>
+total 0
+lr-x------ 1 username username 64 May  7 14:32 0 -> 'pipe:[5181666]'
+lrwx------ 1 username username 64 May  7 14:32 1 -> /dev/pts/3
+lrwx------ 1 username username 64 May  7 14:32 2 -> /dev/pts/3
+                    </code></pre>
+                    <p class="fragment"><code class="bash">man 5 procfs</code></p>
+                </section>
+
+                <section>
+                    <h3>To debug or to debug, that is not a question — exercise</h3>
+                    <p>Find the maximum number of files your shell (PID <code class="bash">$$</code>) can open. Hint: /limits</p>
+                    <p>Extra exercise: Find the PID of the <code class="bash">journalctl</code> command:</p>
+                    <pre class="bash"><code data-trim>
+$ journalctl --catalog --follow --unit=sshd | grep "$USER" &
+                    </code></pre>
+                    <aside class="notes">Use pipe “inode” number from <code class="bash">ls -l /proc/$!/fd</code> in <code class="bash">ls -l /proc/*/fd/1 | grep INODE</code></aside>
+                </section>
+
+                <section id="portability">
+                    <h3>Say no to portability</h3>
+                    <p>Even <a href="https://tiswww.case.edu/php/chet/bash/POSIX">POSIX mode</a> does not lead to portable code:</p>
+                    <pre class="bash fragment"><code data-trim>
+$ type -a [[
+[[ is a shell keyword
+$ bash --posix
+bash-4.4$ [[ 1 ]]
+                    </code><code class="fragment" data-trim>
+bash-4.4$ echo $?
+0
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Say no to portability</h3>
+                    <p>Readability often suffers — compare</p>
+                    <pre class="bash fragment"><code data-trim>
+sort -V
+                    </code></pre>
+                    <p class="fragment">with</p>
+                    <pre class="bash fragment"><code data-trim>
+sort --version-sort
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Say no to portability</h3>
+                    <p><a href="https://mywiki.wooledge.org/Bashism">Bashisms</a> are helpful:</p>
+                    <ul class="fragment">
+                        <li><code class="bash">read -a</code></li>
+                        <li><code class="bash">done &lt(my_script)</code></li>
+                        <li><code class="bash">$'\n'</code></li>
+                        <li>…</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Say no to portability</h3>
+                    <ul>
+                        <li class="fragment">Focus on the applicable shell + version</li>
+                        <li class="fragment">Avoid premature optimisation</li>
+                    </ul>
+                </section>
+
+                <section id="file-loop">
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>*.sh in the current directory in current locale’s alphabetical order:</p>
+                    <pre class="bash fragment" style="text-decoration: line-through;"><code data-trim>
+ls *.sh | while read file
+do
+    something $file
+done
+                    </code></pre>
+                    <p class="fragment">Expelled from PhD programme<span class="fragment">, computer ground to dust and buried using the secret rituals of the church of Stéphane Chazelas.</span></p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>*.sh in the current directory in current locale’s alphabetical order:</p>
+                    <pre class="bash fragment"><code data-trim>
+for file in ./*.sh
+[…]
+                    </code></pre>
+                    <p class="fragment">Easy!</p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>*.sh <em>including dotfiles</em> in the current directory in current locale’s alphabetical order:</p>
+                    <pre class="bash fragment"><code data-trim>
+shopt -s dotglob
+for file in ./*.sh
+[…]
+                    </code></pre>
+                    <p class="fragment">Easy!</p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>*.sh except for foo.sh in the current directory in current locale’s alphabetical order:</p>
+                    <pre class="bash fragment"><code data-trim>
+shopt -s extglob
+for file in ./!(foo).sh
+[…]
+                    </code></pre>
+                    <p class="fragment">OK then</p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>*.sh in and below the current directory in current locale’s alphabetical order:</p>
+                    <pre class="bash fragment"><code data-trim>
+shopt -s globstar
+for file in ./**/*.sh
+[…]
+                    </code></pre>
+                    <p class="fragment">Sure…</p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>Universal ordering:</p>
+                    <pre class="bash fragment"><code data-trim>
+export LC_COLLATE=C
+for file in ./*
+[…]
+                    </code></pre>
+                    <p class="fragment">Or <code class="bash">LC_COLLATE="en_NZ.utf8"</code>…</p>
+                    <p class="fragment"><code class="bash">curl dict://dict.org/d:collate</code></p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p><a href="https://unix.stackexchange.com/a/27400/3645">Reverse order</a>:</p>
+                    <pre class="bash fragment"><code data-trim>
+files=(./*)
+for ((index = ${#files[@]} - 1; index >= 0; index--))
+do
+    something "${files[$index]}"
+done
+                    </code></pre>
+                    <p class="fragment">The end is near.</p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>Non globbable pattern:</p>
+                    <pre class="bash fragment"><code data-trim>
+while IFS= read -r -d '' -u 9 path
+do
+    something "$path"
+done 9&lt &lt(find . \( -type d -regex '^.*/\.git$' -prune -false \) -o -type f -exec printf '%s\0' {} +)
+                    </code></pre>
+                    <p class="fragment">My eyes are bleeding!</p>
+                </section>
+
+                <section>
+                    <h3>PhD thesis: looping through files</h3>
+                    <p>Combining all of these:</p>
+                    <p class="fragment" style="font-size: 200%"><span style="text-decoration: line-through;">Haha nope!</span> Left as an exercise to the reader.</p>
+                </section>
+
+                <section id="resources">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="https://github.com/l0b0/advanced-shell-scripting-with-bash">These slides</a></li>
+                        <li>Catalyst IRC channel #bash</li>
+                        <li><a href="https://mywiki.wooledge.org/EnglishFrontPage">Greg’s Wiki</a> is opinionated, rude, and the best Bash reading in existence</li>
+                        <li>The <a href="https://unix.stackexchange.com/">Unix &amp; Linux Stack Exchange</a> answers all your questions</li>
+                        <li>Search engine results often have bad advice</li>
+                    </ul>
+                </section>
+
+                <!-- Slide with Catalyst slogan -->
+                <section class="image-slide">
+                    <img class="cat-slogan-image" src="css/theme/images/freedom-to-innovate.svg" alt="freedom to innovate">
+                </section>
+            </div>
+
+            <div class="footer">
+                <div class="scarf">
+                    <div class="scarf-orange"></div>
+                    <div class="scarf-yellow"></div>
+                    <div class="scarf-blue"></div>
+                    <div class="scarf-green"></div>
+                </div>
+                <div class="footer-inner">
+                    <div class="catalyst-logo-footer">Catalyst</div>
+                    <div class="open-source-technologists">open source technologists</div>
+                </div>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                transition: 'none',
+                slideNumber: true,
+                history: true,
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ],
+                width: "100%",
+            });
+        </script>
+    </body>
 </html>
